@@ -10,6 +10,7 @@ const produitsInitiaux = [
   { id: 5, nom: "Œufs", prix: 18, statut: "Acheté" },
   { id: 6, nom: "Riz", prix: 14, statut: "À acheter" },
 ];
+
 let produits = produitsInitiaux.map((produit) => ({ ...produit }));
 let prochainId = 1;
 
@@ -21,6 +22,7 @@ const filtreStatut = document.getElementById("filtre-statut");
 const triPrix = document.getElementById("tri-prix");
 const listeProduits = document.getElementById("liste-produits");
 const message = document.getElementById("message");
+
 
 function afficherProduits(liste) {
   listeProduits.replaceChildren();
@@ -123,12 +125,34 @@ function modifierStatut(id) {
   // TODO : changer uniquement le statut du bon produit dans les deux sens.
   // Le nom, le prix et l'id ne changent pas.
   // Mettre à jour la sauvegarde et l'affichage selon les critères actifs.
+
+  let produit = produits.find(item => item.id == id)
+  console.log(produit);
+
+  if (produit.statut == "À acheter") {
+    produit.statut = "Acheté"
+    afficherProduits(produits)
+  }
+
+  else {
+    produit.statut = "À acheter"
+    afficherProduits(produits)
+  }
 }
 
 function supprimerProduit(id) {
   // TODO : demander confirmation et retirer uniquement le bon produit.
   // Mettre à jour la sauvegarde et l'affichage si la suppression est confirmée.
+  produits = produits.filter(item => item.id !== id)
+  // afficherProduits(produits)
+  sauvegarderProduits()
+  actualiserAffichage()
+
+
+  // console.log(produitsInitiaux);
+
 }
+// champRecherche.addEventListener("input",appliquerCriteres)
 
 function appliquerCriteres() {
   // TODO : combiner la recherche et le statut, puis appliquer triPrix.value.
@@ -136,17 +160,37 @@ function appliquerCriteres() {
   // Modes : initial, croissant et decroissant.
   // Retourner les résultats sans modifier le tableau complet produits.
   // Le retour ci-dessous affiche provisoirement toute la liste.
+  let inpotRes = champRecherche.value.toLowerCase().trim()
+
+  // let result = produits.filter(produit => produit.nom.toLowerCase().trim().includes(inpotRes))
+  produits = produits.filter(produit => produit.nom.toLowerCase().trim().includes(inpotRes))
+  //  console.log(result);
+
+  if (produits == "À acheter")
+    produits = produits.filter(produit => produit.statut == "À acheter")
+  if (produits == "Acheté")
+    produits = produits.filter(produit => produit.statut == "Acheté")
+
+  
   return produits;
 }
 
 function reinitialiserCriteres() {
   // TODO : vider la recherche, sélectionner tous les produits et l'ordre initial.
   // Actualiser l'affichage, sans modifier les produits ni leur sauvegarde.
+  champRecherche.textContent = ""
+  filtreStatut.selectIndex = 0
+  triPrix.selectIndex = 0
+
+
 }
 
 function sauvegarderProduits() {
   // TODO : sauvegarder le tableau complet produits dans localStorage.
   // Cette fonction est déjà appelée après un ajout.
+  localStorage.setItem("Produits", JSON.stringify(produits))
+
+  produits = JSON.parse(localStorage.getItem(produits))
 }
 
 function chargerProduits() {
