@@ -179,8 +179,8 @@ function reinitialiserCriteres() {
   // TODO : vider la recherche, sélectionner tous les produits et l'ordre initial.
   // Actualiser l'affichage, sans modifier les produits ni leur sauvegarde.
   champRecherche.textContent = ""
-  filtreStatut.selectIndex = 0
-  triPrix.selectIndex = 0
+  filtreStatut.selectindex = 0
+  triPrix.selectindex = 0
 
 
 }
